@@ -21,7 +21,7 @@ class AndroidApplication : Application(),HasActivityInjector {
     val appComponent : ApplicationComponent by lazy(mode = LazyThreadSafetyMode.NONE){
         DaggerApplicationComponent.builder()
                 .application(this)
-                .apiModule(ApiModule("https://pokeapi.co/api/v2/"))
+                .apiModule(ApiModule("https://pokeapi.co/api/v2/ "))
                 .Build()
     }
 

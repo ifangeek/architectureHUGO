@@ -1,9 +1,12 @@
 package com.example.diegojosuepachecorosas.demodiego.features.pokemons.presentation.activity
 
 import android.arch.lifecycle.Observer
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log.d
 import com.example.diegojosuepachecorosas.demodiego.R
 import com.example.diegojosuepachecorosas.demodiego.core.platform.BaseActivity
 import com.example.diegojosuepachecorosas.demodiego.features.pokemons.presentation.adapter.RVPokemonsAdapter
@@ -14,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class PokemonActivity : BaseActivity() {
 
     companion object {
-        fun newInstance() = PokemonActivity()
+        fun newInstance(context: Context) = Intent(context,PokemonActivity::class.java)
     }
 
     private val viewModel by lazy {
@@ -49,6 +52,7 @@ class PokemonActivity : BaseActivity() {
                         if ((visibleItemCount + pastVisibleItem) >= totalItemCount) {
                             aptoCargar = false
                             viewModel.loadPokemons(20, offset)
+                            d("parametros 1",offset.toString())
                         }
                     }
                 }
@@ -61,8 +65,10 @@ class PokemonActivity : BaseActivity() {
             it?.run {
                 when (this) {
                     is PokemonsViewState.Success -> {
-                        adapter.data = pokemons
+                        adapter.addListPokemons(pokemons)
                         offset += pokemons.size
+                        aptoCargar = true
+
 
                     }
                 }
@@ -70,5 +76,7 @@ class PokemonActivity : BaseActivity() {
         })
 
         viewModel.loadPokemons(20,offset)
+        d("parametros 3",offset.toString())
+
     }
 }

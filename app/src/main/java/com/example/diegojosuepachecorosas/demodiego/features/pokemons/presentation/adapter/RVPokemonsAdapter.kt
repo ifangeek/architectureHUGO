@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_pokemon.view.*
 
 class RVPokemonsAdapter : RecyclerView.Adapter<RVPokemonsAdapter.ViewHolder>() {
 
-    var data: List<PokemonVM> = emptyList()
+    var data: MutableList<PokemonVM> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -32,11 +32,18 @@ class RVPokemonsAdapter : RecyclerView.Adapter<RVPokemonsAdapter.ViewHolder>() {
 
     }
 
+    fun addListPokemons(listPokemonVM: List<PokemonVM>){
+        data.addAll(listPokemonVM)
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(model: PokemonVM) {
             val imageView = itemView.iv_pokemon as AppCompatImageView
             imageView.load("http://pokeapi.co/media/sprites/pokemon/" + model.id + ".png")
+            itemView.tv_pokemon.text = model.name
+
             d("imageview","http://pokeapi.co/media/sprites/pokemon/" + model.id + ".png")
 
         }
