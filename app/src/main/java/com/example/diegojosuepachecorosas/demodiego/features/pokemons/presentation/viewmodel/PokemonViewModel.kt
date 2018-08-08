@@ -12,27 +12,27 @@ import javax.inject.Inject
 
 class PokemonViewModel
 @Inject constructor(private val schedulerProvider: BaseSchedulerProvider,
-                    private val getAllPokemonInteractor: GetAllPokemonInteractor) : ViewModel(){
+                    private val getAllPokemonInteractor: GetAllPokemonInteractor) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     val state = MutableLiveData<PokemonsViewState>()
 
-    fun loadPokemons(limit:Int,offset:Int){
-            disposables.add(getAllPokemonInteractor.execute(GetAllPokemonInteractor.Params(limit,offset))
-                    .delay(3,TimeUnit.SECONDS)
-                    .map { PokemonVMMapper.map(it) }
-                    .subscribeOn(schedulerProvider.io())
-                    .observeOn(schedulerProvider.ui())
-                    .doOnSubscribe{state.value = PokemonsViewState.Loading}
-                    .subscribe({
-                        if(it.isEmpty()){
-                            state.value = PokemonsViewState.noPokemons
-                        } else {
-                            state.value = PokemonsViewState.Success(it)
-                        }
-                    }, {
-                        state.value = PokemonsViewState.Error("Error al conectar con el servidor")
-                    }))
+    fun loadPokemons(limit: Int, offset: Int) {
+        disposables.add(getAllPokemonInteractor.execute(GetAllPokemonInteractor.Params(limit, offset))
+                .map { PokemonVMMapper.map(it) }
+                .delay(2,TimeUnit.SECONDS)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .doOnSubscribe { state.value = PokemonsViewState.Loading }
+                .subscribe({
+                    if (it.isEmpty()) {
+                        state.value = PokemonsViewState.noPokemons
+                    } else {
+                        state.value = PokemonsViewState.Success(it)
+                    }
+                }, {
+                    state.value = PokemonsViewState.Error("Error al conectar con el servidor")
+                }))
     }
 
     override fun onCleared() {

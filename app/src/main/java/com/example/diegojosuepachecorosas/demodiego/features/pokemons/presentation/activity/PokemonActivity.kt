@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log.d
 import com.example.diegojosuepachecorosas.demodiego.R
 import com.example.diegojosuepachecorosas.demodiego.core.platform.BaseActivity
 import com.example.diegojosuepachecorosas.demodiego.features.pokemons.presentation.adapter.RVPokemonsAdapter
@@ -39,6 +38,13 @@ class PokemonActivity : BaseActivity() {
         rv_pokemons.adapter = adapter
         var layout = GridLayoutManager(this, 3)
         rv_pokemons.layoutManager = layout
+        layout.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                if (adapter.itemCount - 1 == position) return 3
+
+                return 1
+            }
+        }
 
         rv_pokemons.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
@@ -52,7 +58,7 @@ class PokemonActivity : BaseActivity() {
                         if ((visibleItemCount + pastVisibleItem) >= totalItemCount) {
                             aptoCargar = false
                             viewModel.loadPokemons(20, offset)
-                            d("parametros 1",offset.toString())
+
                         }
                     }
                 }
@@ -64,19 +70,31 @@ class PokemonActivity : BaseActivity() {
         viewModel.state.observe(this, Observer {
             it?.run {
                 when (this) {
+                    PokemonsViewState.Loading ->{
+                        adapter.isLoading = true
+
+                    }
+                    is PokemonsViewState.Error -> {
+                        adapter.isLoading = false
+
+
+                    }
                     is PokemonsViewState.Success -> {
                         adapter.addListPokemons(pokemons)
                         offset += pokemons.size
                         aptoCargar = true
-
+                        adapter.isLoading = false
 
                     }
                 }
             }
         })
 
-        viewModel.loadPokemons(20,offset)
-        d("parametros 3",offset.toString())
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadPokemons(20,offset)
     }
 }
