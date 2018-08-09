@@ -16,8 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".features.pokemons.presentation.activity.PokemonActivity"
-            android:windowSoftInputMode="adjustPan">
+        <activity android:name=".features.pokemons.presentation.activity.MansoryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

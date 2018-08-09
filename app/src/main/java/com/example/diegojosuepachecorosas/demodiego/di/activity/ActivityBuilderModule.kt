@@ -1,5 +1,6 @@
 package com.example.diegojosuepachecorosas.demodiego.di.activity
 
+import com.example.diegojosuepachecorosas.demodiego.features.pokemons.presentation.activity.MansoryActivity
 import com.example.diegojosuepachecorosas.demodiego.features.pokemons.presentation.activity.PokemonActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -8,5 +9,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBuilderModule {
 
     @ContributesAndroidInjector(modules = [])
-    abstract fun providesMainActivity(): PokemonActivity
+    abstract fun providesMainActivity(): MansoryActivity
 }
